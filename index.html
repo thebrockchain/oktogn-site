@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Claim Your Number.</title>
+<meta name="description" content="OKTOGN is the squares game gone live, across every sport. Claim a number 0-9 and sweep the pot off the final number on real NBA, WNBA, MLB, World Cup, UFC, and PGA action. Play-money skill demo." />
+<meta property="og:title" content="OKTOGN - claim your number" />
+<meta property="og:description" content="Squares, but live, across every sport. Claim a number 0-9 and sweep the pot off the final number. NBA, WNBA, MLB, World Cup, UFC, and PGA - all live. 🦆" />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#070612" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#00f0ff; --magenta:#ff2bd6; --lime:#b6ff1a; --gold:#ffd23f;
+    --bg:#070612; --bg2:#0d0a24; --ink:#f2f0ff; --muted:#9a93c7;
+    --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.10);
+    --display:'Unbounded',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
+    --grad:linear-gradient(90deg,var(--cyan),var(--magenta) 55%,var(--lime));
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; font-family:var(--body); color:var(--ink); line-height:1.6;
+    background:radial-gradient(1100px 600px at 50% -10%,rgba(255,43,214,.12),transparent),
+               radial-gradient(900px 500px at 90% 10%,rgba(0,240,255,.08),transparent),
+               linear-gradient(180deg,var(--bg),var(--bg2));
+    background-attachment:fixed; min-height:100vh;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 22px}
+  a{color:inherit}
+  .grad{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+
+  /* nav - everything stays on ONE line and scales down with the viewport (never wraps;
+     on very small screens it scrolls sideways rather than clipping) */
+  nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:20px 0; flex-wrap:nowrap;
+    overflow-x:auto; scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  .brand{display:inline-flex; align-items:center; font-family:var(--display); font-weight:900;
+    font-size:clamp(18px,3.4vw,26px); letter-spacing:.08em; white-space:nowrap; flex:0 0 auto}
+  .brand .grad{display:inline-flex; align-items:center}
+  .duck-o{height:1.05em; width:1.05em; margin:0 .04em; vertical-align:middle; overflow:visible; position:relative; top:-.04em}
+  nav .links{display:flex; gap:clamp(8px,1.8vw,22px); align-items:center; font-weight:600; font-size:clamp(10px,1.45vw,14px); flex-wrap:nowrap}
+  nav .links a{color:var(--muted); text-decoration:none; transition:color .2s; white-space:nowrap}
+  nav .links a:hover{color:var(--ink)}
+  nav .links .btn{font-size:clamp(11px,1.5vw,15px); padding:9px clamp(10px,1.6vw,18px)}
+
+  .btn{display:inline-block; font-family:var(--display); font-weight:800; letter-spacing:.04em; white-space:nowrap;
+    text-decoration:none; padding:14px 26px; border-radius:14px; font-size:15px; cursor:pointer; border:0;
+    transition:transform .15s, box-shadow .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:var(--grad); color:#0a0618; box-shadow:0 10px 40px rgba(255,43,214,.35)}
+  .btn-ghost{background:transparent; color:var(--ink); border:1px solid var(--line)}
+
+  /* hero */
+  header{text-align:center; padding:60px 0 40px}
+  .hero-duck{width:96px; height:96px; margin:0 auto 18px; display:block;
+    filter:drop-shadow(0 0 26px rgba(255,43,214,.5)); animation:bob 2.6s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-9px) rotate(3deg)}}
+  @media (prefers-reduced-motion:reduce){.hero-duck{animation:none}}
+  h1{font-family:var(--display); font-weight:900; letter-spacing:.04em; line-height:1.05;
+    font-size:clamp(20px,6.4vw,72px); margin:0 0 14px; white-space:nowrap}
+  .sub{font-size:clamp(11px,1.6vw,14px); color:var(--muted); max-width:620px; margin:0 auto 28px}
+  .cta{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+  .pill{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--cyan); border:1px solid var(--line); border-radius:999px; padding:6px 14px; margin-bottom:22px}
+
+  /* sections */
+  section{padding:54px 0}
+  h2{font-family:var(--display); font-weight:800; font-size:clamp(24px,4vw,38px); text-align:center; margin:0 0 8px}
+  .lead{text-align:center; color:var(--muted); max-width:760px; margin:0 auto 36px}
+  .grid{display:grid; gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media (max-width:760px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media (max-width:480px){.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px}
+  .card .n{font-family:var(--display); font-weight:900; font-size:30px; line-height:1}
+  .card h3{font-family:var(--display); font-weight:700; font-size:17px; margin:12px 0 6px}
+  .card p{margin:0; color:var(--muted); font-size:14px}
+  /* sports lineup: center each card, drop the status badge below the sport name */
+  #sports .card{text-align:center}
+  .sport-badge{display:block; font-size:11px; font-weight:700; letter-spacing:.14em; margin:4px 0 10px}
+  .sport-logo{height:32px; width:32px; object-fit:contain; flex:0 0 auto}
+  .ico{display:inline-block; margin-right:14px}   /* breathing room between a card emoji and its title */
+  #sports .card h3{display:flex; align-items:center; justify-content:center; gap:10px}
+
+  /* board Demo */
+  .board{display:grid; gap:8px; justify-content:center; margin:8px auto 6px; grid-template-columns:repeat(5,54px)}
+  .seat{width:54px; height:54px; border-radius:12px; border:1px solid var(--line); display:grid; place-items:center;
+    font-family:var(--display); font-weight:900; font-size:20px; background:rgba(255,255,255,.03)}
+  .seat.win{background:linear-gradient(180deg,rgba(182,255,26,.18),transparent); border-color:var(--lime); color:var(--lime);
+    box-shadow:0 0 26px rgba(182,255,26,.3)}
+
+  /* Waitlist */
+  .wl{background:var(--card); border:1px solid var(--line); border-radius:22px; padding:34px; text-align:center; max-width:620px; margin:0 auto}
+  .wl form{display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; justify-content:center}
+  .wl input{flex:1 1 240px; background:#0b0a1e; border:1px solid var(--line); border-radius:12px; color:var(--ink);
+    padding:14px 16px; font-family:inherit; font-size:15px}
+  .wl input:focus{outline:none; border-color:var(--magenta)}
+
+  footer{border-top:1px solid var(--line); margin-top:30px; padding:30px 0 50px; text-align:center; color:var(--muted); font-size:13px}
+  footer .social{display:flex; gap:18px; justify-content:center; margin:14px 0; font-weight:600}
+  footer a{color:var(--muted); text-decoration:none}
+  footer a:hover{color:var(--ink)}
+  .disc{margin:14px auto 0; opacity:.8; line-height:1.7; white-space:nowrap; font-size:clamp(5px,1.6vw,13px)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <div class="brand"><span class="grad">OKT<svg class="duck-o" id="navDuck" viewBox="0 0 64 64" aria-hidden="true"></svg>GN</span></div>
+    <div class="links">
+      <a href="#how">How it works</a>
+      <a href="#sports">Sports</a>
+      <a href="#why">Why OKTOGN</a>
+      <a class="btn btn-ghost" href="demo.html" style="padding:9px 18px">Play the Demo</a>
+    </div>
+  </nav>
+
+  <header>
+    <svg class="hero-duck" id="heroDuck" viewBox="0 0 64 64" aria-hidden="true"></svg>
+    <div class="pill">Play-money skill Demo · Live Sports</div>
+    <h1>Claim Your <span class="grad">Number.</span></h1>
+    <p class="sub">
+      Squares, but Live, across Every Sport.<br>
+      Pick a digit 0-9.<br>
+      <b>Sweep the pot if it's the final Number!</b><br>
+      Teams' combined score in hoops.<br>
+      The second a fight ends.<br>
+      Group of golfers' combined cards.<br>
+      All settled in real time off your favorite Sports!
+    </p>
+    <div class="cta">
+      <a class="btn btn-primary" href="demo.html">▶ Play the Demo</a>
+      <a class="btn btn-ghost" href="#waitlist">Join the Waitlist</a>
+    </div>
+  </header>
+
+  <section id="how">
+    <h2>How it <span class="grad">Works</span></h2>
+    <p class="lead">Ten seats, One pot, basically Every Whistle.<br>Casual Prediction, No Spread.<br>Your Number &amp; the Scoreboard.</p>
+    <div class="grid g4">
+      <div class="card"><div class="n grad">1</div><h3>Claim a Number</h3><p>Tap an open digit 0-9, or join random. Ten seats fill a contest, then it locks.</p></div>
+      <div class="card"><div class="n grad">2</div><h3>Watch it Live</h3><p>The Game plays. At each official timeout, halftime &amp; the final, a digit hits.</p></div>
+      <div class="card"><div class="n grad">3</div><h3>Win the Number</h3><p>Winner = the last digit of the Live final Number. Hold it and you sweep the pot.</p></div>
+      <div class="card"><div class="n grad">4</div><h3>Settles Live</h3><p>Every break is its own pot, settled in real time off the Live feed. In hoops the final pays double.</p></div>
+    </div>
+    <div style="text-align:center; margin-top:26px">
+      <p class="lead" style="margin-bottom:12px">Hoops score <b style="color:var(--ink)">48-35</b> → last digit <b style="color:var(--lime)">3</b> sweeps:</p>
+      <div class="board" id="board"></div>
+    </div>
+  </section>
+
+  <section id="sports">
+    <h2>One Game, <span class="grad">Every Sport</span>.</h2>
+    <p class="lead">The same ten-seat board.<br>A different "final number" for each sport.<br>Always pulled from the "LIVE" action.<br>No offseason, something is always on!</p>
+    <div class="grid g3">
+      <!-- row 1: live -->
+      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png" alt="" onerror="this.outerHTML='🏀'">NBA</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Last digit of both teams' combined score at every TV timeout, halftime, and the double-weighted final.</p></div>
+      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" onerror="this.outerHTML='⚾'">MLB</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Runs are too sparse alone, so we settle on combined runs + total bases off the box score (single 1, double 2, triple 3, homer 4), every inning. Live on the full schedule now.</p></div>
+      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/wnba.png" alt="" onerror="this.outerHTML='🏀'">WNBA</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Same hoops engine across all four quarters - the fastest-growing league in the country, already on the board.</p></div>
+      <!-- row 2 -->
+      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/pgatour.png" alt="" onerror="this.outerHTML='⛳'">PGA Tour</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Last digit of your three golfers' combined strokes, settled at the end of every round. Live on tournament weeks now.</p></div>
+      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/leaguelogos/soccer/500/4.png" alt="" onerror="this.outerHTML='⚽'">FIFA</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Goals are rare, so the number is combined shots at halftime and full time. Live on the World Cup schedule now.</p></div>
+      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/ufc.png" alt="" onerror="this.outerHTML='🥊'">UFC</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Your number is the second the fight ends. When the finish lands, one seat takes the whole pot; a decision voids and holds are refunded. Live on the next card.</p></div>
+      <!-- row 3 -->
+      <div class="card"><h3><img class="sport-logo" src="ncaa.svg" alt="" onerror="this.outerHTML='🏈'">College Football</h3><div class="sport-badge" style="color:var(--muted)">OFFSEASON</div><p>Saturday's version - same combined-score squares each quarter, the two-minute warning, and the double final. Wired and ready for the fall.</p></div>
+      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" alt="" onerror="this.outerHTML='🏈'">NFL</h3><div class="sport-badge" style="color:var(--muted)">OFFSEASON</div><p>Football is the original squares game: last digit of the combined score each quarter, the two-minute warning, and the double final. Wired and ready for kickoff.</p></div>
+      <div class="card"><h3><img class="sport-logo" src="ncaa.svg" alt="" onerror="this.outerHTML='🏀'">College Basketball</h3><div class="sport-badge" style="color:var(--muted)">OFFSEASON</div><p>Same combined-score game on the same engine - in the offseason now, back when the season tips off in November.</p></div>
+    </div>
+  </section>
+
+  <section id="why">
+    <h2>Why it's <span class="grad">Different</span></h2>
+    <p class="lead">The fun of a Squares Board, automated LIVE across Every Sport.<br>Fair, Transparent, &amp; Impossible to Fake.</p>
+    <div class="grid g3">
+      <div class="card"><h3><span class="ico">🏟️</span>Real Games, Real Time</h3><p>Powered by Live data across the board - NBA, WNBA, MLB, the World Cup, UFC, and PGA, with college hoops and football wired for their seasons. The clock, the score, the finish: all real.</p></div>
+      <div class="card"><h3><span class="ico">🔢</span>Pick Your Number</h3><p>Claim the digit you want 0-9 yourself, or grab a random seat - first come, first served. Every number is equally likely to hit, so it is fair either way.</p></div>
+      <div class="card"><h3><span class="ico">🤝</span>Player Versus Player</h3><p>You play the other nine seats, never the house. A flat 8% rake hosts it - and a quarter of that goes back to local teachers, fire, police &amp; EMS. Players keep 92%, still pure peer-to-peer, settled instantly off the Live feed.</p></div>
+      <div class="card"><h3><span class="ico">🦆</span>Made to Share</h3><p>Spin up a contest, send a link, and your whole group is in the same lobby in seconds.</p></div>
+      <div class="card"><h3><span class="ico">📈</span>Multiple Stakes</h3><p>Run it small or large - 1u to 100u - each stake its own ten-seat pool.</p></div>
+      <div class="card"><h3><span class="ico">🎯</span>Skill, Not-Luck Only</h3><p>Read the pace, the foul trouble, the run - when the whistle blows decides the pot.</p></div>
+    </div>
+  </section>
+
+  <section id="waitlist">
+    <div class="wl">
+      <h2 style="margin-bottom:6px">Get in <span class="grad">Early</span> 🦆</h2>
+      <p style="color:var(--muted); margin:0">Drop your email for launch news, invites, and Game-1 contests.</p>
+      <form onsubmit="event.preventDefault(); this.querySelector('.msg').textContent='Thanks! You\'re on the list. (Wire this form to your email tool.)';">
+        <input type="email" required placeholder="you@email.com" aria-label="Email address" />
+        <button class="btn btn-primary" type="submit">Notify Me</button>
+        <div class="msg" style="flex-basis:100%; color:var(--lime); font-size:14px; margin-top:6px"></div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="brand" style="font-size:20px; justify-content:center; display:flex"><span class="grad">OKT<svg class="duck-o" id="footDuck" viewBox="0 0 64 64" aria-hidden="true"></svg>GN</span></div>
+    <div class="social">
+      <a href="#" data-social="x">X</a>
+      <a href="#" data-social="youtube">YouTube</a>
+      <a href="#" data-social="instagram">Instagram</a>
+      <a href="#" data-social="tiktok">TikTok</a>
+    </div>
+    <div class="disc"><b>OKTOGN is a PLAY-unit skill Demo.</b><br>No real-money wagering.<br>Pooled-money contest on Live Games is a regulated product in most U.S. states.<br>Any real-money version requires licensing, geofencing, age &amp; identity verification, and gaming-law counsel.</div>
+    <div style="margin-top:16px; font-weight:700; letter-spacing:.04em">Built by <span class="grad">THE BROCKCHAIN</span></div>
+    <div style="margin-top:6px; opacity:.6">© <span id="yr"></span> OKTOGN</div>
+  </footer>
+
+</div>
+
+<script>
+  // One source of truth for the duck - same bird as the app. Injected into Every logo spot + favicon.
+  var DUCK =
+    '<defs><linearGradient id="GID" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0" stop-color="#00f0ff"/><stop offset=".55" stop-color="#ff2bd6"/><stop offset="1" stop-color="#b6ff1a"/>' +
+    '</linearGradient></defs>' +
+    '<g fill="url(#GID)">' +
+      '<path d="M8 43 C8 33 16 27 26 28 C31 28 34 31 37 34 C41 30 48 28 53 33 C60 39 56 51 46 54 C37 57 17 57 11 50 C9 48 8 46 8 43 Z"/>' +
+      '<circle cx="24" cy="22" r="13"/>' +
+      '<path d="M51 33 Q61 29 58 39 Q56 43 50 41 Z"/>' +
+    '</g>' +
+    '<path d="M31 42 Q43 39 48 48 Q40 53 30 49 Z" fill="#070612" opacity=".16"/>' +
+    '<path d="M13 19 Q0 19 0 24 Q0 29 13 26 Z" fill="#ffb02e"/>' +
+    '<circle cx="21" cy="19" r="2.6" fill="#070612"/>' +
+    '<circle cx="22" cy="18" r=".9" fill="#fff"/>';
+  function fill(id, gid){ var el=document.getElementById(id); if(el) el.innerHTML = DUCK.replace(/GID/g, gid); }
+  fill('navDuck','nd'); fill('heroDuck','hd'); fill('footDuck','fd');
+
+  // favicon (duck on dark rounded square)
+  (function(){
+    var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='#070612'/>" + DUCK.replace(/GID/g,'fg') + "</svg>";
+    var l = document.createElement('link'); l.rel='icon'; l.type='image/svg+xml';
+    l.href = 'data:image/svg+xml,' + encodeURIComponent(svg); document.head.appendChild(l);
+  })();
+
+  // the little board Demo: digit 3 is the winner
+  (function(){
+    var b=document.getElementById('board'); if(!b) return;
+    var n=10, seatW=54, gap=8;
+    for(var d=0; d<n; d++){ var s=document.createElement('div'); s.className='seat'+(d===3?' win':''); s.textContent=d; b.appendChild(s); }
+    // pick the largest column count that fits, then even out the rows so the
+    // top row never has more seats than the bottom (5/5 here, balanced if it wraps further)
+    function balance(){
+      var avail=(b.parentElement.clientWidth)||320;
+      var fit=Math.max(1, Math.floor((avail+gap)/(seatW+gap)));
+      var rows=Math.ceil(n/Math.min(fit,n));
+      var cols=Math.ceil(n/rows);
+      b.style.gridTemplateColumns='repeat('+cols+','+seatW+'px)';
+    }
+    balance();
+    window.addEventListener('resize', balance);
+  })();
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

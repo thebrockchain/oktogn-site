@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OKTOGN - The Pre-Show</title>
+<meta name="description" content="Watch how OKTOGN works across every sport. A self-running simulation of the number landing on NBA, MLB, UFC, and PGA - learn the idea before you play. Play-money skill demo." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cyan:#00f0ff; --magenta:#ff2bd6; --lime:#b6ff1a; --gold:#ffd23f;
+    --bg:#070612; --bg2:#0d0a24; --ink:#f2f0ff; --muted:#9a93c7;
+    --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.10);
+    --display:'Unbounded',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
+    --grad:linear-gradient(90deg,var(--cyan),var(--magenta) 55%,var(--lime));
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:var(--body); color:var(--ink); line-height:1.6; min-height:100vh;
+    background:radial-gradient(1100px 600px at 50% -10%,rgba(255,43,214,.12),transparent),
+               radial-gradient(900px 500px at 90% 10%,rgba(0,240,255,.08),transparent),
+               linear-gradient(180deg,var(--bg),var(--bg2));}
+  .grad{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .wrap{max-width:760px; margin:0 auto; padding:0 18px}
+  a{color:inherit}
+
+  /* top bar */
+  nav{display:flex; align-items:center; justify-content:space-between; padding:18px 0}
+  .brand{font-family:var(--display); font-weight:900; letter-spacing:.04em; font-size:22px; text-decoration:none}
+  .nav-link{font-size:13px; color:var(--muted); text-decoration:none; border:1px solid var(--line);
+    border-radius:999px; padding:7px 14px; transition:.15s}
+  .nav-link:hover{color:var(--ink); border-color:var(--magenta)}
+
+  /* heading */
+  .kick{display:inline-block; white-space:nowrap; font-size:clamp(9px,2.6vw,11px); font-weight:700;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--cyan); border:1px solid var(--line);
+    border-radius:999px; padding:5px 13px}
+  h1{font-family:var(--display); font-weight:900; letter-spacing:.03em; line-height:1.05;
+    font-size:clamp(22px,5.6vw,46px); margin:14px 0 6px; white-space:nowrap}
+  .tagline{color:var(--muted); margin:0 0 22px; font-size:15px}
+
+  /* stage */
+  .stage{background:var(--card); border:1px solid var(--line); border-radius:22px; padding:20px 18px 22px;
+    box-shadow:0 30px 80px rgba(0,0,0,.35)}
+  .stage-head{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+  .sport-id{display:flex; align-items:center; gap:10px}
+  .sport-emoji{font-size:26px; line-height:1}
+  .sport-name{font-family:var(--display); font-weight:800; font-size:20px}
+  .badge{font-size:10px; font-weight:800; letter-spacing:.14em; color:var(--lime);
+    border:1px solid rgba(182,255,26,.4); border-radius:999px; padding:3px 9px}
+  .rule{font-size:13px; color:var(--muted); margin:10px 0 0}
+  .rule b{color:var(--ink); font-weight:600}
+
+  /* scoreboard panel */
+  .panel{margin:16px 0 4px; border:1px solid var(--line); border-radius:16px; background:rgba(0,0,0,.28);
+    padding:14px 16px; min-height:104px; display:flex; flex-direction:column; justify-content:center}
+  .clockrow{display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:10px}
+  .clock{font-family:var(--display); font-weight:700; font-size:12px; letter-spacing:.12em;
+    color:var(--gold); border:1px solid rgba(255,210,63,.35); border-radius:999px; padding:3px 11px}
+  .teams{display:flex; align-items:center; justify-content:center; gap:14px}
+  .team{display:flex; align-items:center; gap:9px; min-width:0}
+  .team .ab{font-family:var(--display); font-weight:800; font-size:15px; color:var(--ink)}
+  .team .sc{font-family:var(--display); font-weight:900; font-size:30px; line-height:1}
+  .vs{color:var(--muted); font-weight:700; font-size:13px}
+  .sub{display:flex; justify-content:center; gap:18px; margin-top:9px; font-size:12px; color:var(--muted)}
+  .sub b{color:var(--ink); font-weight:700}
+  .golfers{display:flex; flex-direction:column; gap:6px}
+  .golfer{display:flex; align-items:center; justify-content:space-between; font-size:14px}
+  .golfer .gn{color:var(--ink); font-weight:600}
+  .golfer .gs{font-family:var(--display); font-weight:800; font-size:18px}
+
+  /* the number reveal */
+  .reveal{text-align:center; margin:12px 0 2px; min-height:24px; font-size:14px; color:var(--muted);
+    opacity:0; transform:translateY(4px); transition:.35s}
+  .reveal.show{opacity:1; transform:none}
+  .reveal .eq{color:var(--ink); font-weight:700}
+  .reveal .dig{font-family:var(--display); font-weight:900; color:var(--lime); font-size:18px;
+    text-shadow:0 0 18px rgba(182,255,26,.5)}
+
+  /* seat board */
+  .board{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; max-width:360px; margin:14px auto 4px}
+  .seat{position:relative; aspect-ratio:1/1; border-radius:12px; border:1px solid var(--line);
+    display:grid; place-items:center; font-family:var(--display); font-weight:900; font-size:20px;
+    background:rgba(255,255,255,.03); color:var(--ink); transition:.3s}
+  .seat.win{background:linear-gradient(180deg,rgba(182,255,26,.22),transparent); border-color:var(--lime);
+    color:var(--lime); box-shadow:0 0 26px rgba(182,255,26,.35); transform:translateY(-2px)}
+  .seat .you{position:absolute; top:-8px; right:-6px; font-size:8px; font-weight:800; letter-spacing:.08em;
+    color:#0a0a0a; background:var(--cyan); border-radius:999px; padding:2px 6px}
+  .seat.youwin{box-shadow:0 0 30px rgba(0,240,255,.5)}
+
+  /* narration + settlement */
+  .narr{min-height:46px; text-align:center; font-size:14px; color:var(--muted); margin:12px auto 0; max-width:560px}
+  .settle{text-align:center; font-family:var(--display); font-weight:800; font-size:15px; margin-top:8px;
+    min-height:22px; opacity:0; transition:.3s}
+  .settle.show{opacity:1}
+  .settle .pot{color:var(--lime)}
+  .settle .whole{color:var(--cyan)}
+  .settle .void{color:var(--gold)}
+
+  /* controls */
+  .controls{display:flex; align-items:center; justify-content:center; flex-wrap:nowrap;
+    gap:clamp(6px,1.8vw,10px); margin-top:18px}
+  .ctrl{font-family:var(--body); font-weight:700; font-size:clamp(12px,3.2vw,14px); color:var(--ink);
+    cursor:pointer; white-space:nowrap; background:rgba(255,255,255,.05); border:1px solid var(--line);
+    border-radius:999px; padding:9px clamp(11px,3.4vw,18px); transition:.15s}
+  .ctrl:hover{border-color:var(--cyan); background:rgba(0,240,255,.08)}
+  .ctrl.primary{background:var(--grad); color:#0a0a12; border:none}
+  .dots{display:flex; justify-content:center; flex-wrap:nowrap; gap:clamp(5px,1.6vw,8px); margin-top:16px}
+  .dot{display:flex; align-items:center; gap:6px; white-space:nowrap; font-size:clamp(10px,2.8vw,11px);
+    color:var(--muted); cursor:pointer; border:1px solid var(--line); border-radius:999px;
+    padding:5px clamp(8px,2.4vw,11px); transition:.15s}
+  .dot.active{color:var(--ink); border-color:var(--magenta); background:rgba(255,43,214,.1)}
+  .dot:hover{color:var(--ink)}
+
+  /* progress bar under stage */
+  .prog{height:3px; background:rgba(255,255,255,.08); border-radius:3px; overflow:hidden; margin:16px 0 0}
+  .prog-fill{height:100%; width:0; background:var(--grad); transition:width .3s linear}
+
+  .foot{text-align:center; color:var(--muted); font-size:12px; padding:26px 0 34px; opacity:.7}
+  .foot a{color:var(--cyan); text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand grad" href="index.html">OKTOGN</a>
+    <a class="nav-link" href="index.html">Back to site</a>
+  </nav>
+
+  <span class="kick">The Pre-Show · Watch It Land</span>
+  <h1>How <span class="grad">OKTOGN</span> Works</h1>
+  <p class="tagline">No live game needed. Watch a contest play out across four sports - the number lands at every break, and one digit sweeps the pot.</p>
+
+  <section class="stage">
+    <div class="stage-head">
+      <div class="sport-id">
+        <span class="sport-emoji" id="sportEmoji">🏀</span>
+        <span class="sport-name" id="sportName">NBA</span>
+      </div>
+      <span class="badge" id="sportLabel">LIVE</span>
+    </div>
+    <p class="rule" id="sportRule"></p>
+
+    <div class="panel" id="panel"></div>
+    <div class="reveal" id="reveal"></div>
+
+    <div class="board" id="board"></div>
+
+    <p class="narr" id="narr"></p>
+    <p class="settle" id="settle"></p>
+
+    <div class="prog"><div class="prog-fill" id="progFill"></div></div>
+
+    <div class="controls">
+      <button class="ctrl primary" id="playBtn">⏸ Pause</button>
+      <button class="ctrl" id="skipBtn">Skip ⏭</button>
+      <button class="ctrl" id="replayBtn">↻ Replay</button>
+    </div>
+
+    <div class="dots" id="dots"></div>
+  </section>
+
+  <p class="foot">OKTOGN is a play-money skill demo. No real-money wagering. &nbsp;·&nbsp; <a href="index.html">Join the waitlist →</a></p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var lastDigit = function(n){ return ((n % 10) + 10) % 10; };
+
+  // YOU hold seat 7 - gives the viewer a rooting interest.
+  var YOU = 7;
+
+  // ---- Panel renderers (return HTML for the scoreboard area) ----
+  function ballPanel(b){
+    return '<div class="clockrow"><span class="clock">'+b.clock+'</span></div>'+
+      '<div class="teams">'+
+        '<div class="team"><span class="ab">'+b.home+'</span><span class="sc">'+b.h+'</span></div>'+
+        '<span class="vs">vs</span>'+
+        '<div class="team"><span class="sc">'+b.a+'</span><span class="ab">'+b.away+'</span></div>'+
+      '</div>';
+  }
+  function mlbPanel(b){
+    var runs = b.hr + b.ar, bases = b.htb + b.atb;
+    return '<div class="clockrow"><span class="clock">'+b.clock+'</span></div>'+
+      '<div class="teams">'+
+        '<div class="team"><span class="ab">'+b.home+'</span><span class="sc">'+b.hr+'</span></div>'+
+        '<span class="vs">vs</span>'+
+        '<div class="team"><span class="sc">'+b.ar+'</span><span class="ab">'+b.away+'</span></div>'+
+      '</div>'+
+      '<div class="sub"><span>Runs <b>'+runs+'</b></span><span>Total bases <b>'+bases+'</b></span></div>';
+  }
+  function ufcPanel(b){
+    return '<div class="clockrow"><span class="clock">'+b.clock+'</span></div>'+
+      '<div class="teams">'+
+        '<div class="team"><span class="ab">'+b.home+'</span></div>'+
+        '<span class="vs">vs</span>'+
+        '<div class="team"><span class="ab">'+b.away+'</span></div>'+
+      '</div>'+
+      '<div class="sub"><span>'+b.status+'</span></div>';
+  }
+  function pgaPanel(b){
+    var rows = b.g.map(function(x){
+      return '<div class="golfer"><span class="gn">'+x.n+'</span><span class="gs">'+x.s+'</span></div>';
+    }).join('');
+    return '<div class="clockrow"><span class="clock">'+b.clock+'</span></div><div class="golfers">'+rows+'</div>';
+  }
+
+  // ---- The four sports, each a sequence of beats ----
+  // settle:true marks a break where the number lands. The digit is COMPUTED from the
+  // beat state with the real per-sport rule, so the math on screen is always correct.
+  var SPORTS = [
+    {
+      key:'nba', emoji:'🏀', name:'NBA', label:'LIVE',
+      rule:'The number is the <b>last digit of both teams’ combined score</b>. It lands at every TV timeout, quarter end, halftime, and the double-weighted final.',
+      panel: ballPanel,
+      value: function(b){ return b.h + b.a; },
+      breakdown: function(b){ return b.h + ' + ' + b.a + ' = ' + (b.h + b.a); },
+      label2:'combined score',
+      beats:[
+        {clock:'Q1 12:00', home:'DEN', away:'LAL', h:0, a:0, settle:false, note:'Ten seats, digits 0-9. You’re holding 7. Nothing settles at tip-off - the number lands at the breaks.'},
+        {clock:'Q1 6:24', home:'DEN', away:'LAL', h:18, a:15, settle:true, label:'Q1 - TV timeout', note:'First media timeout. The board settles on the combined score right now.'},
+        {clock:'Q1 0:00', home:'DEN', away:'LAL', h:27, a:25, settle:true, label:'End of Q1', note:'Quarter break - another fresh pot settles.'},
+        {clock:'HALFTIME', home:'DEN', away:'LAL', h:54, a:49, settle:true, label:'Halftime', note:'Halftime number, straight off the scoreboard.'},
+        {clock:'Q3 4:10', home:'DEN', away:'LAL', h:78, a:71, settle:true, label:'Q3 - TV timeout', note:'Late-game timeout, late-game pot.'},
+        {clock:'FINAL', home:'DEN', away:'LAL', h:112, a:104, settle:true, double:true, label:'FINAL buzzer', note:'Final buzzer. In hoops the final pays double - twice the pot on one digit.'}
+      ]
+    },
+    {
+      key:'mlb', emoji:'⚾', name:'MLB', label:'LIVE',
+      rule:'Runs are too sparse alone, so the number is <b>combined runs + total bases</b> (single 1, double 2, triple 3, homer 4). It settles at the end of every inning.',
+      panel: mlbPanel,
+      value: function(b){ return (b.hr + b.ar) + (b.htb + b.atb); },
+      breakdown: function(b){ return 'runs ' + (b.hr+b.ar) + ' + bases ' + (b.htb+b.atb) + ' = ' + ((b.hr+b.ar)+(b.htb+b.atb)); },
+      label2:'runs + total bases',
+      beats:[
+        {clock:'TOP 1', home:'NYY', away:'BOS', hr:0, ar:0, htb:0, atb:0, settle:false, note:'A run alone barely moves - so we add total bases off the box score. You’re on 7.'},
+        {clock:'END 1', home:'NYY', away:'BOS', hr:0, ar:1, htb:1, atb:3, settle:true, label:'End of 1st', note:'Every inning is its own settlement.'},
+        {clock:'END 3', home:'NYY', away:'BOS', hr:2, ar:1, htb:6, atb:5, settle:true, label:'End of 3rd', note:'Runs and bases both climb - the digit keeps moving.'},
+        {clock:'END 6', home:'NYY', away:'BOS', hr:3, ar:3, htb:9, atb:8, settle:true, label:'End of 6th', note:'Tie game, but the number doesn’t care who’s winning.'},
+        {clock:'END 8', home:'NYY', away:'BOS', hr:4, ar:3, htb:12, atb:10, settle:true, label:'End of 8th', note:'One inning to go.'},
+        {clock:'FINAL', home:'NYY', away:'BOS', hr:5, ar:4, htb:14, atb:11, settle:true, double:true, label:'FINAL (9th)', note:'Final inning pays double.'}
+      ]
+    },
+    {
+      key:'ufc', emoji:'🥊', name:'UFC', label:'LIVE',
+      rule:'Your number is <b>the second the fight ends</b>. There are no breaks - when the finish lands, one seat takes the entire pot. A decision voids and every seat is refunded.',
+      panel: ufcPanel,
+      value: function(b){ return b.endSeconds; },
+      breakdown: function(b){ return b.clockText + ' = ' + b.endSeconds + ' seconds'; },
+      label2:'finish time',
+      beats:[
+        {clock:'ROUND 1 · 5:00', home:'REYES', away:'CRUZ', status:'Live - feeling it out', settle:false, note:'No timeouts, no quarters. The only number is the second it ends. You’re holding 7.'},
+        {clock:'ROUND 1 · 0:00', home:'REYES', away:'CRUZ', status:'Round 1 in the books', settle:false, note:'Goes the distance of round one. Still live, still no settlement.'},
+        {clock:'ROUND 2 · 3:47', home:'REYES', away:'CRUZ', status:'FINISH - knockout', settle:true, whole:true, clockText:'3:47', endSeconds:227, label:'The finish', note:'Knockout at 3:47. That clock reading is the number - one seat sweeps everything.'},
+        {clock:'THE OTHER ENDING', home:'REYES', away:'CRUZ', status:'Goes to the judges', settle:false, voidNote:true, note:'Had it reached a decision instead, the contest voids - no digit, and every seat is refunded.'}
+      ]
+    },
+    {
+      key:'pga', emoji:'⛳', name:'PGA Tour', tab:'PGA', label:'LIVE',
+      rule:'Your number is your <b>three-golfer group’s combined strokes</b>, settled at the end of every round - four settlements over the tournament.',
+      panel: pgaPanel,
+      value: function(b){ return b.g[0].s + b.g[1].s + b.g[2].s; },
+      breakdown: function(b){ return b.g[0].s + ' + ' + b.g[1].s + ' + ' + b.g[2].s + ' = ' + (b.g[0].s + b.g[1].s + b.g[2].s); },
+      label2:'combined strokes',
+      beats:[
+        {clock:'ROUND 1 · THU', g:[{n:'Koepka',s:70},{n:'McIlroy',s:71},{n:'Scheffler',s:69}], settle:true, label:'Round 1', note:'Three golfers grouped together. Add their cards, take the last digit. You hold 7.'},
+        {clock:'ROUND 2 · FRI', g:[{n:'Koepka',s:68},{n:'McIlroy',s:73},{n:'Scheffler',s:70}], settle:true, label:'Round 2', note:'Fresh round, fresh strokes, fresh pot.'},
+        {clock:'ROUND 3 · SAT', g:[{n:'Koepka',s:69},{n:'McIlroy',s:70},{n:'Scheffler',s:67}], settle:true, label:'Round 3 (Moving Day)', note:'Moving day - the group goes low.'},
+        {clock:'ROUND 4 · SUN', g:[{n:'Koepka',s:67},{n:'McIlroy',s:66},{n:'Scheffler',s:71}], settle:true, double:true, label:'Final round', note:'Sunday’s final round closes it out.'}
+      ]
+    }
+  ];
+
+  // ---- DOM refs ----
+  var el = function(id){ return document.getElementById(id); };
+  var board = el('board'), panel = el('panel'), reveal = el('reveal'),
+      narr = el('narr'), settle = el('settle'), progFill = el('progFill'),
+      dotsWrap = el('dots'), playBtn = el('playBtn'), skipBtn = el('skipBtn'), replayBtn = el('replayBtn');
+
+  // build the 10 seats once
+  var seats = [];
+  for (var d = 0; d < 10; d++){
+    var s = document.createElement('div');
+    s.className = 'seat'; s.textContent = d;
+    if (d === YOU){ var tag = document.createElement('span'); tag.className = 'you'; tag.textContent = 'YOU'; s.appendChild(tag); }
+    board.appendChild(s); seats.push(s);
+  }
+  // build sport dots
+  SPORTS.forEach(function(sp, i){
+    var dt = document.createElement('div'); dt.className = 'dot'; dt.dataset.i = i;
+    dt.innerHTML = '<span>'+sp.emoji+'</span><span>'+(sp.tab || sp.name)+'</span>';
+    dt.addEventListener('click', function(){ goTo(+dt.dataset.i, 0); });
+    dotsWrap.appendChild(dt);
+  });
+
+  var si = 0, bi = 0, timer = null, paused = false;
+
+  function clearSeats(){
+    seats.forEach(function(s){ s.classList.remove('win', 'youwin'); });
+  }
+
+  function render(){
+    var sp = SPORTS[si], b = sp.beats[bi];
+    el('sportEmoji').textContent = sp.emoji;
+    el('sportName').textContent = sp.name;
+    el('sportRule').innerHTML = sp.rule;
+    panel.innerHTML = sp.panel(b);
+    narr.textContent = b.note || '';
+    clearSeats();
+    reveal.classList.remove('show'); reveal.innerHTML = '';
+    settle.classList.remove('show'); settle.innerHTML = '';
+
+    // dots + progress
+    var dots = dotsWrap.children;
+    for (var k = 0; k < dots.length; k++) dots[k].classList.toggle('active', k === si);
+    progFill.style.width = Math.round(((bi + 1) / sp.beats.length) * 100) + '%';
+
+    if (b.settle){
+      var val = sp.value(b), dig = lastDigit(val);
+      // light the winning seat
+      seats[dig].classList.add('win');
+      if (dig === YOU) seats[dig].classList.add('youwin');
+      // reveal the math after a short beat so the eye follows it
+      setTimeout(function(){
+        reveal.innerHTML = sp.label2 + ' <span class="eq">' + sp.breakdown(b) + '</span> &nbsp;→&nbsp; digit <span class="dig">' + dig + '</span>';
+        reveal.classList.add('show');
+      }, 420);
+      setTimeout(function(){
+        if (b.whole){
+          settle.innerHTML = 'Seat <span class="whole">' + dig + '</span> takes the <span class="whole">entire pot</span>' + (dig === YOU ? ' - that’s you. 🦆' : '.');
+        } else {
+          settle.innerHTML = 'Seat <span class="pot">' + dig + '</span> sweeps the pot' + (b.double ? ' <span class="pot">(double)</span>' : '') + (dig === YOU ? ' - you win! 🦆' : '.');
+        }
+        settle.classList.add('show');
+      }, 760);
+    } else if (b.voidNote){
+      setTimeout(function(){
+        settle.innerHTML = '<span class="void">Contest voids · all seats refunded</span>';
+        settle.classList.add('show');
+      }, 500);
+    }
+  }
+
+  function schedule(){
+    clearTimeout(timer);
+    if (paused) return;
+    var b = SPORTS[si].beats[bi];
+    var dwell = b.settle ? 3600 : (b.voidNote ? 3400 : 2500);
+    timer = setTimeout(advance, dwell);
+  }
+
+  function advance(){
+    bi++;
+    if (bi >= SPORTS[si].beats.length){ si = (si + 1) % SPORTS.length; bi = 0; }
+    render(); schedule();
+  }
+
+  function goTo(newSi, newBi){
+    si = newSi; bi = newBi; render(); schedule();
+  }
+
+  // ---- controls ----
+  playBtn.addEventListener('click', function(){
+    paused = !paused;
+    playBtn.textContent = paused ? '▶ Play' : '⏸ Pause';
+    if (paused) clearTimeout(timer); else schedule();
+  });
+  skipBtn.addEventListener('click', function(){
+    si = (si + 1) % SPORTS.length; bi = 0; render(); schedule();
+  });
+  replayBtn.addEventListener('click', function(){
+    si = 0; bi = 0; paused = false; playBtn.textContent = '⏸ Pause'; render(); schedule();
+  });
+
+  render(); schedule();
+})();
+</script>
+</body>
+</html>
