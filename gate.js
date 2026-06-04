@@ -1,16 +1,52 @@
 /* OKTOGN access gate - shows an "under construction" wall to the public. A bypass code
-   (typed, or passed as ?code=... in the URL) unlocks the real site and is remembered in
-   localStorage for that browser. Include as the FIRST child of <body> so the wall paints
-   before the page content (no flash) e.g.  <script src="gate.js"></script>.
-   NOTE: client-side only - the code lives in this file, so this is a soft pre-launch wall,
-   not real security. Change ACCESS_CODE below to your code. */
+   (typed, or passed as ?code=... in the URL) unlocks the real site for that browser.
+   Include as the FIRST child of <body> so the wall paints before the page content (no flash):
+     <script src="gate.js"></script>
+   The code itself is NOT in this file - only its SHA-256 hash. Input is hashed and compared,
+   so the code can't be read out of the source. (Self-contained SHA-256 so it works over
+   plain HTTP too, where window.crypto.subtle is unavailable.) Still a soft pre-launch wall,
+   not real security. To change the code, replace CODE_HASH with the SHA-256 of the new code. */
 (function () {
-  var ACCESS_CODE = 'OKTOGN-VIP';     // <-- change this to your bypass code
+  var CODE_HASH = '3e9c0dd74e83c6233cf6163c0365488b35de6cad117f3c5389e630d4158d0a9a';
   var STORE_KEY = 'oktogn_access';
 
-  function unlocked() { try { return localStorage.getItem(STORE_KEY) === ACCESS_CODE; } catch (e) { return false; } }
-  // shareable bypass link: oktogn.com/?code=OKTOGN-VIP
-  try { var q = new URLSearchParams(location.search).get('code'); if (q && q === ACCESS_CODE) localStorage.setItem(STORE_KEY, ACCESS_CODE); } catch (e) {}
+  // compact SHA-256 (ASCII), returns lowercase hex
+  function sha256(ascii) {
+    function rr(v, a) { return (v >>> a) | (v << (32 - a)); }
+    var mp = Math.pow, mw = mp(2, 32), i, j, out = '', words = [];
+    var bitLen = ascii.length * 8;
+    var h = sha256.h = sha256.h || [], k = sha256.k = sha256.k || [];
+    var pc = k.length, comp = {};
+    for (var c = 2; pc < 64; c++) {
+      if (!comp[c]) {
+        for (i = 0; i < 313; i += c) comp[i] = c;
+        h[pc] = (mp(c, .5) * mw) | 0; k[pc++] = (mp(c, 1 / 3) * mw) | 0;
+      }
+    }
+    ascii += '\x80';
+    while (ascii.length % 64 - 56) ascii += '\x00';
+    for (i = 0; i < ascii.length; i++) { j = ascii.charCodeAt(i); if (j >> 8) return ''; words[i >> 2] |= j << ((3 - i) % 4) * 8; }
+    words[words.length] = (bitLen / mw) | 0; words[words.length] = bitLen;
+    for (j = 0; j < words.length;) {
+      var w = words.slice(j, j += 16), old = h; h = h.slice(0, 8);
+      for (i = 0; i < 64; i++) {
+        var w15 = w[i - 15], w2 = w[i - 2], a = h[0], e = h[4];
+        var t1 = h[7] + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25)) + ((e & h[5]) ^ ((~e) & h[6])) + k[i]
+          + (w[i] = (i < 16) ? w[i] : (w[i - 16] + (rr(w15, 7) ^ rr(w15, 18) ^ (w15 >>> 3)) + w[i - 7] + (rr(w2, 17) ^ rr(w2, 19) ^ (w2 >>> 10))) | 0);
+        var t2 = (rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + ((a & h[1]) ^ (a & h[2]) ^ (h[1] & h[2]));
+        h = [(t1 + t2) | 0].concat(h); h[4] = (h[4] + t1) | 0;
+      }
+      for (i = 0; i < 8; i++) h[i] = (h[i] + old[i]) | 0;
+    }
+    for (i = 0; i < 8; i++) for (j = 3; j + 1; j--) { var b = (h[i] >> (j * 8)) & 255; out += ((b < 16) ? 0 : '') + b.toString(16); }
+    return out;
+  }
+  function matches(code) { return sha256(String(code).trim()) === CODE_HASH; }
+  function unlocked() { try { return localStorage.getItem(STORE_KEY) === CODE_HASH; } catch (e) { return false; } }
+  function grant() { try { localStorage.setItem(STORE_KEY, CODE_HASH); } catch (e) {} }
+
+  // shareable bypass link: oktogn.com/?code=...
+  try { var q = new URLSearchParams(location.search).get('code'); if (q && matches(q)) grant(); } catch (e) {}
   if (unlocked()) return;
 
   var DUCK = '<defs><linearGradient id="ucg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00f0ff"/><stop offset=".55" stop-color="#ff2bd6"/><stop offset="1" stop-color="#b6ff1a"/></linearGradient></defs>'
@@ -48,10 +84,8 @@
     try { inp.focus(); } catch (e) {}
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (inp.value.trim() === ACCESS_CODE) {
-        try { localStorage.setItem(STORE_KEY, ACCESS_CODE); } catch (e) {}
-        gate.remove(); document.documentElement.style.overflow = '';
-      } else { msg.textContent = 'That code is not right. Try again.'; inp.value = ''; inp.focus(); }
+      if (matches(inp.value)) { grant(); gate.remove(); document.documentElement.style.overflow = ''; }
+      else { msg.textContent = 'That code is not right. Try again.'; inp.value = ''; inp.focus(); }
     });
   }
   if (document.body) mount(); else document.addEventListener('DOMContentLoaded', mount);
