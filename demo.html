@@ -28,18 +28,23 @@
 
   /* top bar */
   nav{display:flex; align-items:center; justify-content:space-between; padding:18px 0}
-  .brand{font-family:var(--display); font-weight:900; letter-spacing:.04em; font-size:22px; text-decoration:none}
+  .brand{font-family:var(--display); font-weight:900; letter-spacing:.04em; font-size:22px; text-decoration:none; white-space:nowrap}
+  /* the duck is the "O" - same bird as the app. Raised so it sits in line with the
+     all-caps wordmark (middle-aligns to x-height otherwise, which reads low). */
+  .duck-o{height:1.02em; width:1.02em; margin:0 .03em; vertical-align:middle; overflow:visible; position:relative; top:-.12em}
   .nav-link{font-size:13px; color:var(--muted); text-decoration:none; border:1px solid var(--line);
     border-radius:999px; padding:7px 14px; transition:.15s}
   .nav-link:hover{color:var(--ink); border-color:var(--magenta)}
 
-  /* heading */
+  /* heading - centered */
+  .intro{text-align:center; margin-top:6px}
   .kick{display:inline-block; white-space:nowrap; font-size:clamp(9px,2.6vw,11px); font-weight:700;
     letter-spacing:.16em; text-transform:uppercase; color:var(--cyan); border:1px solid var(--line);
     border-radius:999px; padding:5px 13px}
   h1{font-family:var(--display); font-weight:900; letter-spacing:.03em; line-height:1.05;
-    font-size:clamp(22px,5.6vw,46px); margin:14px 0 6px; white-space:nowrap}
-  .tagline{color:var(--muted); margin:0 0 22px; font-size:15px}
+    font-size:clamp(20px,5.6vw,46px); margin:14px 0 6px; white-space:nowrap}
+  /* tagline broken into short phrase-lines so sentences never wrap mid-thought */
+  .tagline{color:var(--muted); margin:0 auto 22px; font-size:clamp(13px,3.6vw,15px); max-width:640px; line-height:1.5}
 
   /* stage */
   .stage{background:var(--card); border:1px solid var(--line); border-radius:22px; padding:20px 18px 22px;
@@ -123,15 +128,18 @@
 </style>
 </head>
 <body>
+<script src="gate.js"></script>
 <div class="wrap">
   <nav>
-    <a class="brand grad" href="index.html">OKTOGN</a>
+    <a class="brand grad" href="index.html">OKT<svg class="duck-o" id="navDuck" viewBox="0 0 64 64" aria-hidden="true"></svg>GN</a>
     <a class="nav-link" href="index.html">Back to site</a>
   </nav>
 
-  <span class="kick">The Pre-Show · Watch It Land</span>
-  <h1>How <span class="grad">OKTOGN</span> Works</h1>
-  <p class="tagline">No live game needed. Watch a contest play out across four sports - the number lands at every break, and one digit sweeps the pot.</p>
+  <header class="intro">
+    <span class="kick">The Pre-Show · Watch It Land</span>
+    <h1>How <span class="grad">OKT<svg class="duck-o" id="hdrDuck" viewBox="0 0 64 64" aria-hidden="true"></svg>GN</span> Works</h1>
+    <p class="tagline">No live game needed.<br>Watch it play out across every sport.<br>The number lands at every break -<br>one digit sweeps the pot.</p>
+  </header>
 
   <section class="stage">
     <div class="stage-head">
@@ -376,6 +384,28 @@
   });
 
   render(); schedule();
+})();
+
+// the duck - same bird as the app/site - injected into the logo spots + favicon
+(function(){
+  var DUCK =
+    '<defs><linearGradient id="GID" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0" stop-color="#00f0ff"/><stop offset=".55" stop-color="#ff2bd6"/><stop offset="1" stop-color="#b6ff1a"/>' +
+    '</linearGradient></defs>' +
+    '<g fill="url(#GID)">' +
+      '<path d="M8 43 C8 33 16 27 26 28 C31 28 34 31 37 34 C41 30 48 28 53 33 C60 39 56 51 46 54 C37 57 17 57 11 50 C9 48 8 46 8 43 Z"/>' +
+      '<circle cx="24" cy="22" r="13"/>' +
+      '<path d="M51 33 Q61 29 58 39 Q56 43 50 41 Z"/>' +
+    '</g>' +
+    '<path d="M31 42 Q43 39 48 48 Q40 53 30 49 Z" fill="#070612" opacity=".16"/>' +
+    '<path d="M13 19 Q0 19 0 24 Q0 29 13 26 Z" fill="#ffb02e"/>' +
+    '<circle cx="21" cy="19" r="2.6" fill="#070612"/>' +
+    '<circle cx="22" cy="18" r=".9" fill="#fff"/>';
+  function fill(id, gid){ var el=document.getElementById(id); if(el) el.innerHTML = DUCK.replace(/GID/g, gid); }
+  fill('navDuck','nd'); fill('hdrDuck','hd');
+  var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='#070612'/>" + DUCK.replace(/GID/g,'fg') + "</svg>";
+  var l = document.createElement('link'); l.rel='icon'; l.type='image/svg+xml';
+  l.href = 'data:image/svg+xml,' + encodeURIComponent(svg); document.head.appendChild(l);
 })();
 </script>
 </body>

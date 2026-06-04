@@ -1,0 +1,58 @@
+/* OKTOGN access gate - shows an "under construction" wall to the public. A bypass code
+   (typed, or passed as ?code=... in the URL) unlocks the real site and is remembered in
+   localStorage for that browser. Include as the FIRST child of <body> so the wall paints
+   before the page content (no flash) e.g.  <script src="gate.js"></script>.
+   NOTE: client-side only - the code lives in this file, so this is a soft pre-launch wall,
+   not real security. Change ACCESS_CODE below to your code. */
+(function () {
+  var ACCESS_CODE = 'OKTOGN-VIP';     // <-- change this to your bypass code
+  var STORE_KEY = 'oktogn_access';
+
+  function unlocked() { try { return localStorage.getItem(STORE_KEY) === ACCESS_CODE; } catch (e) { return false; } }
+  // shareable bypass link: oktogn.com/?code=OKTOGN-VIP
+  try { var q = new URLSearchParams(location.search).get('code'); if (q && q === ACCESS_CODE) localStorage.setItem(STORE_KEY, ACCESS_CODE); } catch (e) {}
+  if (unlocked()) return;
+
+  var DUCK = '<defs><linearGradient id="ucg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00f0ff"/><stop offset=".55" stop-color="#ff2bd6"/><stop offset="1" stop-color="#b6ff1a"/></linearGradient></defs>'
+    + '<g fill="url(#ucg)"><path d="M8 43 C8 33 16 27 26 28 C31 28 34 31 37 34 C41 30 48 28 53 33 C60 39 56 51 46 54 C37 57 17 57 11 50 C9 48 8 46 8 43 Z"/><circle cx="24" cy="22" r="13"/><path d="M51 33 Q61 29 58 39 Q56 43 50 41 Z"/></g>'
+    + '<path d="M31 42 Q43 39 48 48 Q40 53 30 49 Z" fill="#070612" opacity=".16"/><path d="M13 19 Q0 19 0 24 Q0 29 13 26 Z" fill="#ffb02e"/><circle cx="21" cy="19" r="2.6" fill="#070612"/><circle cx="22" cy="18" r=".9" fill="#fff"/>';
+
+  var css = '#ucGate{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:22px;font-family:Inter,system-ui,sans-serif;'
+    + 'background:radial-gradient(1100px 600px at 50% -10%,rgba(255,43,214,.14),transparent),linear-gradient(180deg,#070612,#0d0a24)}'
+    + '#ucGate *{box-sizing:border-box}'
+    + '#ucGate .b{max-width:440px;width:100%;text-align:center;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:38px 28px;box-shadow:0 30px 80px rgba(0,0,0,.45)}'
+    + '#ucGate svg{width:74px;height:74px;display:block;margin:0 auto 14px;overflow:visible;filter:drop-shadow(0 0 22px rgba(255,43,214,.45))}'
+    + '#ucGate .k{font-family:Unbounded,Inter,sans-serif;font-weight:900;letter-spacing:.2em;font-size:13px;color:#00f0ff;margin-bottom:10px}'
+    + '#ucGate h2{font-family:Unbounded,Inter,sans-serif;font-weight:900;font-size:clamp(26px,7vw,40px);margin:0 0 10px;color:#f2f0ff;line-height:1.05}'
+    + '#ucGate .g{background:linear-gradient(90deg,#00f0ff,#ff2bd6 55%,#b6ff1a);-webkit-background-clip:text;background-clip:text;color:transparent}'
+    + '#ucGate p{color:#9a93c7;margin:0 0 22px;font-size:15px;line-height:1.6}'
+    + '#ucGate form{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}'
+    + '#ucGate input{flex:1 1 200px;background:#0b0a1e;border:1px solid rgba(255,255,255,.10);border-radius:12px;color:#f2f0ff;padding:13px 15px;font-size:15px;font-family:inherit}'
+    + '#ucGate input:focus{outline:none;border-color:#ff2bd6}'
+    + '#ucGate button{font-family:Unbounded,Inter,sans-serif;font-weight:800;letter-spacing:.04em;border:0;border-radius:12px;padding:13px 22px;font-size:15px;cursor:pointer;color:#0a0618;background:linear-gradient(90deg,#00f0ff,#ff2bd6 55%,#b6ff1a)}'
+    + '#ucGate .m{margin-top:12px;font-size:13px;min-height:18px;color:#ff2bd6;font-weight:600}';
+
+  var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+
+  var gate = document.createElement('div'); gate.id = 'ucGate';
+  gate.innerHTML = '<div class="b"><svg viewBox="0 0 64 64" aria-hidden="true">' + DUCK + '</svg>'
+    + '<div class="k">OKTOGN</div><h2>Under <span class="g">Construction</span></h2>'
+    + '<p>We are putting the finishing touches on the board.<br>Have a code? Drop it in to take a look.</p>'
+    + '<form autocomplete="off"><input type="password" placeholder="Access code" aria-label="Access code" /><button type="submit">Enter</button></form>'
+    + '<div class="m" role="alert"></div></div>';
+
+  function mount() {
+    (document.body || document.documentElement).appendChild(gate);
+    document.documentElement.style.overflow = 'hidden';
+    var form = gate.querySelector('form'), inp = gate.querySelector('input'), msg = gate.querySelector('.m');
+    try { inp.focus(); } catch (e) {}
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (inp.value.trim() === ACCESS_CODE) {
+        try { localStorage.setItem(STORE_KEY, ACCESS_CODE); } catch (e) {}
+        gate.remove(); document.documentElement.style.overflow = '';
+      } else { msg.textContent = 'That code is not right. Try again.'; inp.value = ''; inp.focus(); }
+    });
+  }
+  if (document.body) mount(); else document.addEventListener('DOMContentLoaded', mount);
+})();

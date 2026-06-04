@@ -3,12 +3,32 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Claim Your Number.</title>
-<meta name="description" content="OKTOGN is the squares game gone live, across every sport. Claim a number 0-9 and sweep the pot off the final number on real NBA, WNBA, MLB, World Cup, UFC, and PGA action. Play skill demo." />
-<meta property="og:title" content="OKTOGN - claim your number" />
-<meta property="og:description" content="Squares, but live, across every sport. Claim a number 0-9 and sweep the pot off the final number. NBA, WNBA, MLB, World Cup, UFC, and PGA - all live. 🦆" />
+<title>OKTOGN - Live Squares, Every Sport</title>
+<meta name="description" content="OKTOGN is the squares game gone live across every sport. Claim a number 0-9 and sweep the pot off the final number on NBA, WNBA, MLB, World Cup, UFC, PGA, NHL, tennis and more - all live. Play skill demo." />
+<link rel="canonical" href="https://oktogn.com/" />
+<link rel="icon" type="image/svg+xml" href="og-cover.png" />
+<meta property="og:title" content="OKTOGN - Live Squares, Every Sport" />
+<meta property="og:description" content="Squares, but live, across every sport. Claim a number 0-9 and sweep the pot off the final number. NBA, WNBA, MLB, World Cup, UFC, PGA and more - all live." />
 <meta property="og:type" content="website" />
+<meta property="og:url" content="https://oktogn.com/" />
+<meta property="og:site_name" content="OKTOGN" />
+<meta property="og:image" content="https://oktogn.com/og-cover.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="OKTOGN - Live Squares, Every Sport" />
+<meta name="twitter:description" content="Squares, but live, across every sport. Claim a number 0-9 and sweep the pot off the final number - NBA, UFC, PGA and more, all live." />
+<meta name="twitter:image" content="https://oktogn.com/og-cover.png" />
 <meta name="theme-color" content="#070612" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"Organization","@id":"https://oktogn.com/#org","name":"OKTOGN","url":"https://oktogn.com/","logo":"https://oktogn.com/og-cover.png","description":"The squares game gone live across every sport. A play-units skill demo."},
+ {"@type":"WebSite","@id":"https://oktogn.com/#site","url":"https://oktogn.com/","name":"OKTOGN","publisher":{"@id":"https://oktogn.com/#org"}},
+ {"@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"What is OKTOGN?","acceptedAnswer":{"@type":"Answer","text":"OKTOGN is squares gone live across every sport. Ten seats hold the digits 0-9, and the seat holding the last digit of the live final number sweeps the pot. It is a play-units skill demo."}},
+  {"@type":"Question","name":"Which sports can I play squares on?","acceptedAnswer":{"@type":"Answer","text":"NBA, WNBA, college hoops, NFL, college football, MLB, soccer and the World Cup, UFC, PGA Tour, NHL, tennis and NASCAR - all live and auto-tracked."}},
+  {"@type":"Question","name":"How does a squares contest work?","acceptedAnswer":{"@type":"Answer","text":"Claim a digit 0-9 or join random, ten seats fill and lock, then each break the last digit of the sport's final number wins that pot. It settles live off the real feed."}}
+ ]}
+]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -44,6 +64,9 @@
   nav .links a{color:var(--muted); text-decoration:none; transition:color .2s; white-space:nowrap}
   nav .links a:hover{color:var(--ink)}
   nav .links .btn{font-size:clamp(11px,1.5vw,15px); padding:9px clamp(10px,1.6vw,18px)}
+  /* on phones, drop the nav demo button (the hero CTA covers it) so the header
+     fits on ONE line instead of spilling off the right edge */
+  @media (max-width:600px){nav .links .btn{display:none}}
 
   .btn{display:inline-block; font-family:var(--display); font-weight:800; letter-spacing:.04em; white-space:nowrap;
     text-decoration:none; padding:14px 26px; border-radius:14px; font-size:15px; cursor:pointer; border:0;
@@ -72,18 +95,60 @@
   .grid{display:grid; gap:16px}
   .g3{grid-template-columns:repeat(3,1fr)}
   .g4{grid-template-columns:repeat(4,1fr)}
-  @media (max-width:760px){.g3,.g4{grid-template-columns:1fr 1fr}}
-  @media (max-width:480px){.g3,.g4{grid-template-columns:1fr}}
+  /* keep cards in a grid on phones - never collapse to an endless single-file stack */
+  @media (max-width:760px){.g3,.g4{grid-template-columns:1fr 1fr; gap:12px}}
+  @media (max-width:480px){
+    .g3,.g4{grid-template-columns:1fr 1fr; gap:10px}
+    .card{padding:16px 14px}
+    .card h3{font-size:15px}
+    .card p{font-size:13px}
+  }
   .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px}
   .card .n{font-family:var(--display); font-weight:900; font-size:30px; line-height:1}
   .card h3{font-family:var(--display); font-weight:700; font-size:17px; margin:12px 0 6px}
   .card p{margin:0; color:var(--muted); font-size:14px}
-  /* sports lineup: center each card, drop the status badge below the sport name */
-  #sports .card{text-align:center}
-  .sport-badge{display:block; font-size:11px; font-weight:700; letter-spacing:.14em; margin:4px 0 10px}
-  .sport-logo{height:32px; width:32px; object-fit:contain; flex:0 0 auto}
+  /* how-it-works step titles stay on one line; min-width:0 keeps the 2-up columns
+     even, and the title font shrinks so the longest ("Win the Number") still fits */
+  #how .card{min-width:0}
+  #how .card h3{white-space:nowrap; font-size:clamp(12px,3.2vw,17px); letter-spacing:-.02em}
+  @media (max-width:480px){#how .card{padding:16px 10px}}
+  /* why-it-works card titles stay on one line - smaller font, tighter tracking, icon hugs text.
+     these titles are long, so on phones the cards go full-width to give them room to not wrap */
+  #why .card{min-width:0}
+  #why .card h3{white-space:nowrap; font-size:clamp(13px,4vw,17px); letter-spacing:-.01em}
+  #why .ico{margin-right:8px}
+  @media (max-width:760px){#why .grid{grid-template-columns:1fr}}
+  /* sports lineup: compact tiles - logo over name over status; detail copy hides when tight */
+  #sports .grid{grid-template-columns:repeat(3,1fr); gap:14px}
+  #sports .card{text-align:center; padding:18px 14px; display:flex; flex-direction:column; justify-content:center}
+  .sport-badge{display:block; font-size:11px; font-weight:700; letter-spacing:.14em; margin:4px 0 0}
+  .sport-logo{height:30px; width:30px; object-fit:contain; flex:0 0 auto}
   .ico{display:inline-block; margin-right:14px}   /* breathing room between a card emoji and its title */
-  #sports .card h3{display:flex; align-items:center; justify-content:center; gap:10px}
+  /* sport cards lead with the league logo only - no wordmark, no emoji. The two
+     NCAA cards keep a small label since they share the same logo. min-height keeps
+     every status badge on the same baseline across a row. */
+  #sports .sport-logo{height:42px; width:auto; max-width:104px; object-fit:contain}
+  /* letters state: the sport's wordmark, shown until its logo is licensed/approved */
+  #sports .sport-wordmark{font-family:var(--display); font-weight:900; font-size:clamp(20px,4.4vw,30px); letter-spacing:.01em; line-height:1}
+  #sports .ncaa-label{font-size:13px; font-weight:700; color:var(--ink); letter-spacing:.01em}
+  #sports .card h3{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; margin:0 0 4px; min-height:64px}
+  /* sport cards are pure logo tiles - no long copy, so all 12 pack tight; the per-sport
+     pages (site/play/) carry the detail */
+  #sports .card p{display:none}
+  #sports a.card{text-decoration:none; color:inherit; transition:transform .15s, border-color .2s}
+  #sports a.card:hover{transform:translateY(-3px); border-color:var(--cyan)}
+  @media (max-width:760px){
+    #sports .grid{grid-template-columns:repeat(3,1fr); gap:10px}
+    #sports .card{padding:14px 8px}
+    #sports .card h3{gap:6px; min-height:52px}
+    #sports .card .sport-logo{height:34px; width:auto; max-width:84px}
+    #sports .ncaa-label{font-size:11px}
+  }
+  @media (max-width:420px){
+    #sports .card{padding:12px 5px}
+    #sports .card h3{font-size:12px}
+    .sport-badge{font-size:10px; letter-spacing:.1em}
+  }
 
   /* board Demo */
   .board{display:grid; gap:8px; justify-content:center; margin:8px auto 6px; grid-template-columns:repeat(5,54px)}
@@ -107,6 +172,7 @@
 </style>
 </head>
 <body>
+<script src="gate.js"></script>
 <div class="wrap">
 
   <nav>
@@ -156,29 +222,18 @@
   <section id="sports">
     <h2>One Game, <span class="grad">Every Sport</span>.</h2>
     <p class="lead">The same ten-seat board.<br>A different "final number" for each sport.<br>Always pulled from the "LIVE" action.<br>No offseason, something is always on!</p>
-    <div class="grid g3">
-      <!-- row 1: live -->
-      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png" alt="" onerror="this.outerHTML='🏀'">NBA</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Last digit of both teams' combined score at every TV timeout, halftime, and the double-weighted final.</p></div>
-      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" onerror="this.outerHTML='⚾'">MLB</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Runs are too sparse alone, so we settle on combined runs + total bases off the box score (single 1, double 2, triple 3, homer 4), every inning. Live on the full schedule now.</p></div>
-      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/wnba.png" alt="" onerror="this.outerHTML='🏀'">WNBA</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Same hoops engine across all four quarters - the fastest-growing league in the country, already on the board.</p></div>
-      <!-- row 2 -->
-      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/pgatour.png" alt="" onerror="this.outerHTML='⛳'">PGA Tour</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Last digit of your three golfers' combined strokes, settled at the end of every round. Live on tournament weeks now.</p></div>
-      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/leaguelogos/soccer/500/4.png" alt="" onerror="this.outerHTML='⚽'">FIFA</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Goals are rare, so the number is combined shots at halftime and full time. Live on the World Cup schedule now.</p></div>
-      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/ufc.png" alt="" onerror="this.outerHTML='🥊'">UFC</h3><div class="sport-badge" style="color:var(--lime)">LIVE</div><p>Your number is the second the fight ends. When the finish lands, one seat takes the whole pot; a decision voids and holds are refunded. Live on the next card.</p></div>
-      <!-- row 3 -->
-      <div class="card"><h3><img class="sport-logo" src="ncaa.svg" alt="" onerror="this.outerHTML='🏈'">College Football</h3><div class="sport-badge" style="color:var(--muted)">OFFSEASON</div><p>Saturday's version - same combined-score squares each quarter, the two-minute warning, and the double final. Wired and ready for the fall.</p></div>
-      <div class="card"><h3><img class="sport-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" alt="" onerror="this.outerHTML='🏈'">NFL</h3><div class="sport-badge" style="color:var(--muted)">OFFSEASON</div><p>Football is the original squares game: last digit of the combined score each quarter, the two-minute warning, and the double final. Wired and ready for kickoff.</p></div>
-      <div class="card"><h3><img class="sport-logo" src="ncaa.svg" alt="" onerror="this.outerHTML='🏀'">College Basketball</h3><div class="sport-badge" style="color:var(--muted)">OFFSEASON</div><p>Same combined-score game on the same engine - in the offseason now, back when the season tips off in November.</p></div>
-    </div>
+    <!-- 12 sports, rendered by the script below. Each shows its LETTERS by default and
+         flips to the official logo only when approved (see SPORT_LOGOS_APPROVED). -->
+    <div class="grid g3" id="sportsGrid"></div>
   </section>
 
   <section id="why">
     <h2>Why it's <span class="grad">Different</span></h2>
     <p class="lead">The fun of a Squares Board, automated LIVE across Every Sport.<br>Fair, Transparent, &amp; Impossible to Fake.</p>
     <div class="grid g3">
-      <div class="card"><h3><span class="ico">🏟️</span>Real Games, Real Time</h3><p>Powered by Live data across the board - NBA, WNBA, MLB, the World Cup, UFC, and PGA, with college hoops and football wired for their seasons. The clock, the score, the finish: all real.</p></div>
-      <div class="card"><h3><span class="ico">🔢</span>Pick Your Number</h3><p>Claim the digit you want 0-9 yourself, or grab a random seat - first come, first served. Every number is equally likely to hit, so it is fair either way.</p></div>
-      <div class="card"><h3><span class="ico">🤝</span>Player Versus Player</h3><p>You play the other nine seats, never the house. A flat 8% rake hosts it - and a quarter of that goes back to local teachers, fire, police &amp; EMS. Players keep 92%, still pure peer-to-peer, settled instantly off the Live feed.</p></div>
+      <div class="card"><h3><span class="ico">🏟️</span>Real Games, Real Time</h3><p>Live data across twelve leagues - NBA, WNBA, college hoops, NFL, college football, MLB, soccer, UFC, PGA, NHL, tennis and NASCAR. The clock, the score, the finish: all real.</p></div>
+      <div class="card"><h3><span class="ico">🔢</span>Pick Your Number</h3><p>Claim the digit you want 0-9, or grab a random seat. Every number is equally likely to hit, so it is fair either way.</p></div>
+      <div class="card"><h3><span class="ico">🤝</span>Player Versus Player</h3><p>You play the other nine seats, never the house. A flat 8% rake hosts it, a quarter of that going back to local teachers, fire, police &amp; EMS. Players keep 92%.</p></div>
       <div class="card"><h3><span class="ico">🦆</span>Made to Share</h3><p>Spin up a contest, send a link, and your whole group is in the same lobby in seconds.</p></div>
       <div class="card"><h3><span class="ico">📈</span>Multiple Stakes</h3><p>Run it small or large - 1u to 100u - each stake its own ten-seat pool.</p></div>
       <div class="card"><h3><span class="ico">🎯</span>Skill, Not-Luck Only</h3><p>Read the pace, the foul trouble, the run - when the whistle blows decides the pot.</p></div>
@@ -253,6 +308,36 @@
     }
     balance();
     window.addEventListener('resize', balance);
+  })();
+
+  // --- sports grid: 12 leagues, each LETTERS by default, LOGO only when approved ---
+  // To turn a sport's official logo ON (once we have the rights/sponsorship), add its
+  // key here, e.g.  var SPORT_LOGOS_APPROVED = { ufc:true, nba:true };
+  var SPORT_LOGOS_APPROVED = {};
+  var SPORTS = [
+    {key:'nba',    letters:'NBA',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/nba.png',     status:'LIVE'},
+    {key:'mlb',    letters:'MLB',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png',     status:'LIVE'},
+    {key:'wnba',   letters:'WNBA',   logo:'https://a.espncdn.com/i/teamlogos/leagues/500/wnba.png',    status:'LIVE'},
+    {key:'pga',    letters:'PGA',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/pgatour.png', status:'LIVE'},
+    {key:'soccer', letters:'FIFA',   logo:'https://a.espncdn.com/i/leaguelogos/soccer/500/4.png',      status:'LIVE'},
+    {key:'ufc',    letters:'UFC',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/ufc.png',     status:'LIVE'},
+    {key:'nhl',    letters:'NHL',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png',     status:'LIVE'},
+    {key:'tennis', letters:'TENNIS', logo:'https://a.espncdn.com/i/espn/misc_logos/500/tennis.png',    status:'LIVE'},
+    {key:'nascar', letters:'NASCAR', logo:'https://a.espncdn.com/i/espn/misc_logos/500/nascar.png',    status:'LIVE'},
+    {key:'college-football',   letters:'CFB', logo:'ncaa.svg', status:'OFFSEASON'},
+    {key:'nfl',    letters:'NFL',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png',     status:'OFFSEASON'},
+    {key:'college-basketball', letters:'CBB', logo:'ncaa.svg', status:'OFFSEASON'}
+  ];
+  (function(){
+    var grid = document.getElementById('sportsGrid'); if(!grid) return;
+    grid.innerHTML = SPORTS.map(function(s){
+      var live = s.status === 'LIVE';
+      var mark = SPORT_LOGOS_APPROVED[s.key]
+        ? '<img class="sport-logo" src="' + s.logo + '" alt="' + s.letters + '">'
+        : '<span class="sport-wordmark grad">' + s.letters + '</span>';
+      return '<a class="card" href="play/' + s.key + '.html"><h3>' + mark + '</h3>'
+        + '<div class="sport-badge" style="color:var(--' + (live ? 'lime' : 'muted') + ')">' + s.status + '</div></a>';
+    }).join('');
   })();
 
   document.getElementById('yr').textContent = new Date().getFullYear();
