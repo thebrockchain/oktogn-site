@@ -47,10 +47,24 @@
   .btn-primary{background:var(--grad);color:#0a0618}
   .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
   .how{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin:34px 0}
-  .how h2{font-family:var(--display);font-weight:800;font-size:20px;margin:0 0 14px}
+  .how h2{font-family:var(--display);font-weight:800;font-size:20px;margin:0 0 14px;text-align:center;white-space:nowrap}
   .how ol{margin:0;padding-left:20px;color:var(--muted)}
   .how li{margin-bottom:8px}
   .how b{color:var(--ink)}
+  /* each sentence on ITS OWN one line (via <br>); a tiny script shrinks the font so the widest
+     line always fits, even on narrow phones - same idea as the app's zoom-to-fit selector rows */
+  .how .basic{font-family:var(--display);font-weight:800;font-size:15px;color:var(--ink);text-align:center;white-space:nowrap;margin:0 0 12px;line-height:1.5}
+  /* balanced wrapping = equal-length lines, no orphan word stranded on the last line */
+  .how .lead{color:var(--muted);text-align:center;text-wrap:balance;max-width:540px;margin:0 auto 20px}
+  .demo{max-width:460px;margin:0 auto;padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03);text-align:center}
+  .demo-head{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+  .demo-num{font-family:var(--display);font-weight:900;font-size:34px;line-height:1.05;font-variant-numeric:tabular-nums}
+  .demo-num small{display:block;margin-top:4px;font-family:var(--body);font-weight:600;font-size:12px;color:var(--muted);text-transform:none;letter-spacing:.02em}
+  /* always 5 + 5 (two rows of five), never 6 + 4 */
+  .demo-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;width:max-content;margin:14px auto 8px}
+  .demo-chip{width:30px;height:34px;display:grid;place-items:center;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.03);font-family:var(--display);font-weight:800;font-size:15px;color:var(--muted);transition:transform .2s,background .2s,color .2s,box-shadow .2s}
+  .demo-chip.win{color:#0a0618;background:var(--grad);border-color:transparent;transform:translateY(-2px) scale(1.08);box-shadow:0 0 18px rgba(0,240,255,.4)}
+  .demo-cap{font-size:12px;color:var(--muted);min-height:1.3em}
   .more{text-align:center;margin:30px 0}
   .more h2{font-family:var(--display);font-weight:800;font-size:16px;color:var(--muted);letter-spacing:.06em;margin:0 0 14px}
   .more a{display:inline-block;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;
@@ -58,6 +72,7 @@
   .more a:hover{color:var(--ink);border-color:var(--cyan)}
   footer{border-top:1px solid var(--line);margin-top:24px;padding:26px 0 44px;text-align:center;color:var(--muted);font-size:13px}
   .disc{opacity:.8;margin-top:10px;font-size:11px;line-height:1.7}
+  @media(max-width:560px){.wrap{padding:0 14px}.how{padding:20px 16px}header{padding:32px 0 28px}}
 </style>
 </head>
 <body>
@@ -76,21 +91,25 @@
   </header>
   <section class="how">
     <h2>How ATP Tennis squares work</h2>
-    <ol>
-      <li><b>Claim a number.</b> Tap an open digit 0-9, or join random. Ten seats fill a contest, then it locks.</li>
-      <li><b>Watch it live.</b> Real game data drives the clock, the score, and every break.</li>
-      <li><b>Win the number.</b> The winning seat holds the last digit of the players' combined games at the end of each set, with a double final (best of 5).</li>
-      <li><b>Settles live.</b> Every break is its own pot, settled in real time off the live feed.</li>
-    </ol>
+    <p class="basic">Claim an open digit 0-9, or join random.<br>Ten seats fill and the board locks.</p>
+    <p class="lead">Tennis settles on the players' COMBINED games. At the end of each set the running game total's last digit takes that break's pot, with a double-weighted final (best of 5).</p>
+    <div class="demo">
+      <div class="demo-head">Live demo</div>
+      <div class="demo-num"><span id="dval">0</span><small>combined games</small></div>
+      <div class="demo-strip" id="dstrip"><span class="demo-chip" data-d="0">0</span><span class="demo-chip" data-d="1">1</span><span class="demo-chip" data-d="2">2</span><span class="demo-chip" data-d="3">3</span><span class="demo-chip" data-d="4">4</span><span class="demo-chip" data-d="5">5</span><span class="demo-chip" data-d="6">6</span><span class="demo-chip" data-d="7">7</span><span class="demo-chip" data-d="8">8</span><span class="demo-chip" data-d="9">9</span></div>
+      <div class="demo-cap" id="dcap">the last digit wins each break</div>
+    </div>
   </section>
   <section class="more">
     <h2>Squares on every other sport</h2>
-    <a href="mlb.html">MLB</a><a href="wnba.html">WNBA</a><a href="soccer.html">Soccer / World Cup</a><a href="ufc.html">UFC</a><a href="mvp.html">MVP - Most Valuable Promotions</a><a href="wta.html">WTA Tennis</a><a href="pga.html">PGA Tour</a><a href="nascar.html">NASCAR</a><a href="f1.html">Formula 1</a><a href="nba.html">NBA</a><a href="nhl.html">NHL</a><a href="nfl.html">NFL</a>
+    <a href="mlb.html">MLB</a><a href="wnba.html">WNBA</a><a href="soccer.html">Soccer / World Cup</a><a href="ufc.html">UFC</a><a href="mvp.html">MVP - Most Valuable Promotions</a><a href="pga.html">PGA Tour</a><a href="nascar.html">NASCAR</a><a href="f1.html">Formula 1</a><a href="nba.html">NBA</a><a href="nhl.html">NHL</a><a href="nfl.html">NFL</a>
   </section>
   <footer>
     <a class="brand grad" href="../index.html" style="font-size:18px">OKTOGN</a>
     <div class="disc"><b>OKTOGN is a play skill demo.</b> No real wagering. A pooled contest on live games is a regulated product in most U.S. states.</div>
   </footer>
 </div>
+<script>(function(){var lo=18,hi=39;var val=document.getElementById('dval'),cap=document.getElementById('dcap'),strip=document.getElementById('dstrip');if(!val||!strip)return;function run(){var target=lo+Math.floor(Math.random()*(hi-lo+1)),win=((target%10)+10)%10;[].forEach.call(strip.querySelectorAll('.win'),function(c){c.classList.remove('win');});cap.textContent='the last digit wins each break';var start=null,dur=850;function step(ts){if(!start)start=ts;var t=Math.min(1,(ts-start)/dur),e=1-Math.pow(1-t,3);val.textContent=Math.round(target*e).toLocaleString();if(t<1){requestAnimationFrame(step);}else{val.textContent=target.toLocaleString();var chip=strip.querySelector('[data-d="'+win+'"]');if(chip)chip.classList.add('win');cap.textContent='digit '+win+' wins this break';}}requestAnimationFrame(step);}run();setInterval(run,3000);})();</script>
+<script>(function(){function fit1(el){if(!el)return;el.style.fontSize='';var avail=el.clientWidth,need=el.scrollWidth;if(need>avail+0.5&&avail>0){var base=parseFloat(getComputedStyle(el).fontSize);el.style.fontSize=(base*avail/need).toFixed(2)+'px';}}function fit(){fit1(document.querySelector('.how h2'));fit1(document.querySelector('.how .basic'));}window.addEventListener('resize',fit);window.addEventListener('load',fit);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fit);}fit();})();</script>
 </body>
 </html>

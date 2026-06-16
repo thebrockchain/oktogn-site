@@ -61,12 +61,17 @@
     + '#ucGate .k{font-family:Unbounded,Inter,sans-serif;font-weight:900;letter-spacing:.2em;font-size:13px;color:#00f0ff;margin-bottom:10px}'
     + '#ucGate h2{font-family:Unbounded,Inter,sans-serif;font-weight:900;font-size:clamp(26px,7vw,40px);margin:0 0 10px;color:#f2f0ff;line-height:1.05}'
     + '#ucGate .g{background:linear-gradient(90deg,#00f0ff,#ff2bd6 55%,#b6ff1a);-webkit-background-clip:text;background-clip:text;color:transparent}'
-    + '#ucGate p{color:#9a93c7;margin:0 0 22px;font-size:15px;line-height:1.6}'
+    + '#ucGate p{color:#9a93c7;margin:0 0 22px;font-size:15px;line-height:1.6;white-space:nowrap}'
     + '#ucGate form{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}'
     + '#ucGate input{flex:1 1 200px;background:#0b0a1e;border:1px solid rgba(255,255,255,.10);border-radius:12px;color:#f2f0ff;padding:13px 15px;font-size:15px;font-family:inherit}'
     + '#ucGate input:focus{outline:none;border-color:#ff2bd6}'
+    + '#ucGate .ucf{position:relative;flex:1 1 200px;display:flex;min-width:0}'
+    + '#ucGate .ucf input{flex:1;min-width:0;padding-right:64px}'
+    + '#ucGate .eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:#9a93c7;font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.04em;cursor:pointer;padding:6px 9px;border-radius:8px}'
+    + '#ucGate .eye:hover{color:#f2f0ff}'
     + '#ucGate button{font-family:Unbounded,Inter,sans-serif;font-weight:800;letter-spacing:.04em;border:0;border-radius:12px;padding:13px 22px;font-size:15px;cursor:pointer;color:#0a0618;background:linear-gradient(90deg,#00f0ff,#ff2bd6 55%,#b6ff1a)}'
-    + '#ucGate .m{margin-top:12px;font-size:13px;min-height:18px;color:#ff2bd6;font-weight:600}';
+    + '#ucGate .m{margin-top:12px;font-size:13px;min-height:18px;color:#ff2bd6;font-weight:600}'
+    + '@media(max-width:480px){#ucGate .b{padding:30px 16px}#ucGate h2{font-size:30px}#ucGate p{line-height:1.55;margin-bottom:18px}}';
 
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
@@ -74,14 +79,27 @@
   gate.innerHTML = '<div class="b"><svg viewBox="0 0 64 64" aria-hidden="true">' + DUCK + '</svg>'
     + '<div class="k">OKTOGN</div><h2>Under <span class="g">Construction</span></h2>'
     + '<p>We are putting the finishing touches on the board.<br>Have a code? Drop it in to take a look.</p>'
-    + '<form autocomplete="off"><input type="password" placeholder="Access code" aria-label="Access code" /><button type="submit">Enter</button></form>'
+    + '<form autocomplete="off"><div class="ucf"><input type="text" placeholder="Access code" aria-label="Access code" autocapitalize="off" autocorrect="off" spellcheck="false" /><button type="button" class="eye" aria-label="Hide code" aria-pressed="true">Hide</button></div><button type="submit">Enter</button></form>'
     + '<div class="m" role="alert"></div></div>';
 
   function mount() {
     (document.body || document.documentElement).appendChild(gate);
     document.documentElement.style.overflow = 'hidden';
     var form = gate.querySelector('form'), inp = gate.querySelector('input'), msg = gate.querySelector('.m');
+    var eye = gate.querySelector('.eye');
     try { inp.focus(); } catch (e) {}
+    // show/hide toggle: the code is visible by default (so you can see what you type), tap to hide.
+    if (eye) eye.addEventListener('click', function () {
+      var willHide = inp.type === 'text';
+      inp.type = willHide ? 'password' : 'text';
+      eye.textContent = willHide ? 'Show' : 'Hide';
+      eye.setAttribute('aria-label', willHide ? 'Show code' : 'Hide code');
+      eye.setAttribute('aria-pressed', String(!willHide));
+      try { inp.focus(); } catch (e) {}
+    });
+    // shrink the subhead so each sentence (split by the <br>) always fits one line on any width
+    var fitP = function () { var p = gate.querySelector('p'); if (!p) return; p.style.fontSize = ''; var avail = p.clientWidth, need = p.scrollWidth; if (need > avail + 0.5 && avail > 0) { var base = parseFloat(getComputedStyle(p).fontSize); p.style.fontSize = (base * avail / need).toFixed(2) + 'px'; } };
+    fitP(); window.addEventListener('resize', fitP);
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (matches(inp.value)) { grant(); gate.remove(); document.documentElement.style.overflow = ''; }
