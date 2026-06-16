@@ -4,18 +4,18 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>OKTOGN - Live Squares, Every Sport</title>
-<meta name="description" content="OKTOGN is the squares game gone live across every sport. Claim a number 0-9 and sweep the pot off the final number on NBA, WNBA, MLB, World Cup, MVP boxing and MMA, PGA, NHL, ATP and WTA tennis and more - all live. Play skill demo." />
+<meta name="description" content="OKTOGN is the squares game gone live across every sport. Claim a number 0-9 and sweep the pot off the final number on WNBA, MLB, World Cup, UFC, MVP boxing and MMA, PGA, ATP and WTA tennis and more - all live. Play skill demo." />
 <link rel="canonical" href="https://oktogn.com/" />
 <link rel="icon" type="image/svg+xml" href="og-cover.png" />
 <meta property="og:title" content="OKTOGN - Live Squares, Every Sport" />
-<meta property="og:description" content="Squares, but live, across every sport. Claim a number 0-9 and sweep the pot off the final number. NBA, WNBA, MLB, World Cup, MVP boxing and MMA, PGA and more - all live." />
+<meta property="og:description" content="Squares, but live, across every sport. Claim a number 0-9 and sweep the pot off the final number. WNBA, MLB, World Cup, UFC, MVP boxing and MMA, PGA and more - all live." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://oktogn.com/" />
 <meta property="og:site_name" content="OKTOGN" />
 <meta property="og:image" content="https://oktogn.com/og-cover.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="OKTOGN - Live Squares, Every Sport" />
-<meta name="twitter:description" content="Squares, but live, across every sport. Claim a number 0-9 and sweep the pot off the final number - NBA, MVP boxing and MMA, PGA and more, all live." />
+<meta name="twitter:description" content="Squares, but live, across every sport. Claim a number 0-9 and sweep the pot off the final number - UFC, MVP boxing and MMA, PGA and more, all live." />
 <meta name="twitter:image" content="https://oktogn.com/og-cover.png" />
 <meta name="theme-color" content="#070612" />
 <script type="application/ld+json">
@@ -24,7 +24,7 @@
  {"@type":"WebSite","@id":"https://oktogn.com/#site","url":"https://oktogn.com/","name":"OKTOGN","publisher":{"@id":"https://oktogn.com/#org"}},
  {"@type":"FAQPage","mainEntity":[
   {"@type":"Question","name":"What is OKTOGN?","acceptedAnswer":{"@type":"Answer","text":"OKTOGN is squares gone live across every sport. Ten seats hold the digits 0-9, and the seat holding the last digit of the live final number sweeps the pot. It is a play-units skill demo."}},
-  {"@type":"Question","name":"Which sports can I play squares on?","acceptedAnswer":{"@type":"Answer","text":"NBA, WNBA, NFL, MLB, soccer and the World Cup, MVP boxing and MMA, PGA Tour, NHL, ATP and WTA tennis and NASCAR - all live and auto-tracked."}},
+  {"@type":"Question","name":"Which sports can I play squares on?","acceptedAnswer":{"@type":"Answer","text":"WNBA, NFL, MLB, soccer and the World Cup, UFC, MVP boxing and MMA, PGA Tour, NHL, ATP and WTA tennis, NASCAR and NBA - all auto-tracked, in season."}},
   {"@type":"Question","name":"How does a squares contest work?","acceptedAnswer":{"@type":"Answer","text":"Claim a digit 0-9 or join random, ten seats fill and lock, then each break the last digit of the sport's final number wins that pot. It settles live off the real feed."}}
  ]}
 ]}
@@ -228,7 +228,7 @@
     <h2>Why it's <span class="grad">Different</span></h2>
     <p class="lead">The fun of a Squares Board, automated LIVE across Every Sport.<br>Fair, Transparent, &amp; Impossible to Fake.</p>
     <div class="grid g3">
-      <div class="card"><h3><span class="ico">🏟️</span>Real Games, Real Time</h3><p>Live data across every league - NBA, WNBA, NFL, MLB, soccer, MVP boxing and MMA, PGA, NHL, ATP and WTA tennis and NASCAR. The clock, the score, the finish: all real.</p></div>
+      <div class="card"><h3><span class="ico">🏟️</span>Real Games, Real Time</h3><p>Live data across every league - WNBA, MLB, soccer, UFC, MVP boxing and MMA, PGA, ATP and WTA tennis and NASCAR (NBA, NHL and NFL in season). The clock, the score, the finish: all real.</p></div>
       <div class="card"><h3><span class="ico">🔢</span>Pick Your Number</h3><p>Claim the digit you want 0-9, or grab a random seat. Every number is equally likely to hit, so it is fair either way.</p></div>
       <div class="card"><h3><span class="ico">🤝</span>Player Versus Player</h3><p>You play the other nine seats, never the house. A flat 8% rake hosts it, a quarter of that going back to local teachers, fire, police &amp; EMS. Players keep 92%.</p></div>
       <div class="card"><h3><span class="ico">🦆</span>Made to Share</h3><p>Spin up a contest, send a link, and your whole group is in the same lobby in seconds.</p></div>
@@ -312,16 +312,17 @@
   // key here, e.g.  var SPORT_LOGOS_APPROVED = { ufc:true, nba:true };
   var SPORT_LOGOS_APPROVED = {};
   var SPORTS = [
-    {key:'nba',    letters:'NBA',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/nba.png',     status:'LIVE'},
     {key:'mlb',    letters:'MLB',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png',     status:'LIVE'},
     {key:'wnba',   letters:'WNBA',   logo:'https://a.espncdn.com/i/teamlogos/leagues/500/wnba.png',    status:'LIVE'},
-    {key:'pga',    letters:'PGA',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/pgatour.png', status:'LIVE'},
     {key:'soccer', letters:'FIFA',   logo:'https://a.espncdn.com/i/leaguelogos/soccer/500/4.png',      status:'LIVE'},
+    {key:'ufc',    letters:'UFC',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/ufc.png',     status:'LIVE'},
     {key:'mvp',    letters:'MVP',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/ufc.png',     status:'LIVE'},
-    {key:'nhl',    letters:'NHL',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png',     status:'LIVE'},
     {key:'atp',    letters:'ATP',    logo:'https://a.espncdn.com/i/espn/misc_logos/500/tennis.png',    status:'LIVE'},
     {key:'wta',    letters:'WTA',    logo:'https://a.espncdn.com/i/espn/misc_logos/500/tennis.png',    status:'LIVE'},
+    {key:'pga',    letters:'PGA',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/pgatour.png', status:'LIVE'},
     {key:'nascar', letters:'NASCAR', logo:'https://a.espncdn.com/i/espn/misc_logos/500/nascar.png',    status:'LIVE'},
+    {key:'nba',    letters:'NBA',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/nba.png',     status:'OFFSEASON'},
+    {key:'nhl',    letters:'NHL',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png',     status:'OFFSEASON'},
     {key:'nfl',    letters:'NFL',    logo:'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png',     status:'OFFSEASON'}
   ];
   (function(){
