@@ -7,7 +7,7 @@
    plain HTTP too, where window.crypto.subtle is unavailable.) Still a soft pre-launch wall,
    not real security. To change the code, replace CODE_HASH with the SHA-256 of the new code. */
 (function () {
-  var CODE_HASH = '3e9c0dd74e83c6233cf6163c0365488b35de6cad117f3c5389e630d4158d0a9a';
+  var CODE_HASH = '54ba10ae5d50013c9d2b4ad8d46d098125f75fc3f2aa516375f3d3ff087f293f';
   var STORE_KEY = 'oktogn_access';
 
   // compact SHA-256 (ASCII), returns lowercase hex
