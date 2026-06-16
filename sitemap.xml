@@ -14,4 +14,5 @@
   <url><loc>https://oktogn.com/play/atp</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://oktogn.com/play/wta</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://oktogn.com/play/nascar</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://oktogn.com/play/f1</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
