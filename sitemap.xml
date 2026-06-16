@@ -4,14 +4,13 @@
   <url><loc>https://oktogn.com/demo.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://oktogn.com/play/nba</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://oktogn.com/play/wnba</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://oktogn.com/play/college-basketball</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://oktogn.com/play/nfl</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://oktogn.com/play/college-football</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://oktogn.com/play/mlb</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://oktogn.com/play/soccer</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://oktogn.com/play/ufc</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://oktogn.com/play/mvp</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://oktogn.com/play/pga</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://oktogn.com/play/nhl</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://oktogn.com/play/tennis</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://oktogn.com/play/atp</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://oktogn.com/play/wta</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://oktogn.com/play/nascar</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
